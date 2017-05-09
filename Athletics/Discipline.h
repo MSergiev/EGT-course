@@ -7,8 +7,10 @@ using std::vector;
 #include <string>
 using std::string;
 
-class Discipline {
-	struct Pair	{
+class Discipline
+{
+	struct Pair
+	{
 		string name;
 		float record;
 	};
