@@ -1,44 +1,54 @@
 #include "Athletes.h"
 
-Athletes::Athletes(string firstName, string lastName, float best, string nationality) {
+Athletes::Athletes(string firstName, string lastName, float best, string nationality)
+{
 	this->firstName = firstName;
 	this->lastName = lastName;
 	this->best = best;
 	this->nationality = nationality;
 }
 
-Athletes::~Athletes() {
+Athletes::~Athletes()
+{
 
 }
 
-void Athletes::setFirstName(const string firstName) {
+void Athletes::setFirstName(const string firstName)
+{
 	this->firstName = firstName;
 }
 
-void Athletes::setLastName(const string lastName) {
+void Athletes::setLastName(const string lastName)
+{
 	this->lastName = lastName;
 }
 
-void Athletes::setBest(const float best) {
+void Athletes::setBest(const float best)
+{
 	this->best = best;
 }
 
-void Athletes::setNationality(const string nationality) {
+void Athletes::setNationality(const string nationality)
+{
 	this->nationality = nationality;
 }
 
-const string Athletes::getFirstName() const {
+const string Athletes::getFirstName() const
+{
 	return firstName;
 }
 
-const string Athletes::getLastName() const {
+const string Athletes::getLastName() const
+{
 	return lastName;
 }
 
-const float Athletes::getBest() const {
+const float Athletes::getBest() const
+{
 	return best;
 }
 
-const string Athletes::getNationality() const {
+const string Athletes::getNationality() const
+{
 	return nationality;
 }

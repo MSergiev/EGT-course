@@ -4,7 +4,8 @@
 #include <string>
 using std::string;
 
-class Athletes {
+class Athletes
+{
 public:
 	Athletes(string = "NaN", string = "NaN", float = 0.0, string = "NaN");
 	~Athletes();

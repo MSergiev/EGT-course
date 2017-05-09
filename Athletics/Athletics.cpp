@@ -7,14 +7,15 @@ using namespace std;
 int main()
 {
 	Athletes test1("Pesho", "Peshov", 2.02, "Pernik");
-	Discipline test2("100m Sprint", 13.2, 9);
+	//Athletes t(test1);
+	Discipline test2("100m Sprint", 13.2, 1.2);
 	Discipline test3("100m Sprint", 12.3, 2);
 
 
 
-	cout << test2.getName() << "\n"
-		 << test2.getRecord() << "\n"
-		 << test2.getWorldRecord();
+	cout << test3.getName() << "\n"
+		 << test3.getRecord() << "\n"
+		 << test3.getWorldRecord();
 
 
 
