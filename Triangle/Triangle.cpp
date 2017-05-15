@@ -72,7 +72,7 @@ istream& operator>> (istream& in, Triangle& obj)
 	return in;
 }
 
-ostream& operator<<(ostream& out, Triangle& obj)
+ostream& operator<<(ostream& out, const Triangle& obj)
 {
 	out << "A: " << obj.getA() << "\n"
 		<< "B: " << obj.getB() << "\n"

@@ -14,7 +14,7 @@ public:
 public:
 	Triangle& operator=(const Triangle&);
 	friend istream& operator>>(istream&, Triangle&);
-	friend ostream& operator<<(ostream&, Triangle&);
+	friend ostream& operator<<(ostream&, const Triangle&);
 	bool operator==(const Triangle&);
 	bool operator!=(const Triangle&);
 public:
