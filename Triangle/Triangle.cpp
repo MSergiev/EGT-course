@@ -36,6 +36,35 @@ void Triangle::_delete()
 	//No need to do anything
 }
 
+Triangle& Triangle::operator=(const Triangle& other)
+{
+	if (*this != other)
+	{
+		_delete();
+		_copy(other);
+	}
+	return *this;
+}
+
+bool Triangle::operator==(const Triangle& other)
+{
+	if (*this == other)
+		return true;
+
+	if (this->getA() == other.getA() &&
+		this->getB() == other.getB() &&
+		this->getC() == other.getC() &&
+		this->getH() == other.getH())
+			return true;
+
+	return false;
+}
+
+bool Triangle::operator!=(const Triangle& other)
+{
+	return !(*this == other);
+}
+
 int Triangle::getA() const
 {
 	return a;
