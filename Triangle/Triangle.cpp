@@ -1,5 +1,8 @@
 #include "Triangle.h"
 
+#include <iostream>
+using std::cout;
+
 Triangle::Triangle(int a, int b, int c, int h)
 {
 	_init(a, b, c, h);
@@ -44,6 +47,39 @@ Triangle& Triangle::operator=(const Triangle& other)
 		_copy(other);
 	}
 	return *this;
+}
+
+istream& operator>> (istream& in, Triangle& obj)
+{
+	int temp;
+
+	cout << "Enter A: ";
+	in >> temp;
+	obj.setA(temp);
+
+	cout << "Enter B: ";
+	in >> temp;
+	obj.setB(temp);
+
+	cout << "Enter C: ";
+	in >> temp;
+	obj.setC(temp);
+
+	cout << "Enter H: ";
+	in >> temp;
+	obj.setH(temp);
+
+	return in;
+}
+
+ostream& operator<<(ostream& out, Triangle& obj)
+{
+	out << "A: " << obj.getA() << "\n"
+		<< "B: " << obj.getB() << "\n"
+		<< "C: " << obj.getC() << "\n"
+		<< "H: " << obj.getH() << "\n";
+
+	return out;
 }
 
 bool Triangle::operator==(const Triangle& other)
