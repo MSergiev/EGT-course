@@ -16,5 +16,6 @@ int main()
 		cout << "T1 == T2\n";
 	if (t1 != t2)
 		cout << "T1 != T2\n";
+
 	return 0;
 }
