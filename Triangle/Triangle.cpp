@@ -1,8 +1,5 @@
 #include "Triangle.h"
 
-#include <iostream>
-using std::cout;
-
 Triangle::Triangle(int a, int b, int c, int h)
 {
 	_init(a, b, c, h);
@@ -53,19 +50,19 @@ istream& operator>> (istream& in, Triangle& obj)
 {
 	int temp;
 
-	cout << "Enter A: ";
+	in.ignore(1);
 	in >> temp;
 	obj.setA(temp);
 
-	cout << "Enter B: ";
+	in.ignore(1);
 	in >> temp;
 	obj.setB(temp);
 
-	cout << "Enter C: ";
+	in.ignore(1);
 	in >> temp;
 	obj.setC(temp);
 
-	cout << "Enter H: ";
+	in.ignore(1);
 	in >> temp;
 	obj.setH(temp);
 
@@ -74,10 +71,10 @@ istream& operator>> (istream& in, Triangle& obj)
 
 ostream& operator<<(ostream& out, const Triangle& obj)
 {
-	out << "A: " << obj.getA() << "\n"
-		<< "B: " << obj.getB() << "\n"
-		<< "C: " << obj.getC() << "\n"
-		<< "H: " << obj.getH() << "\n";
+	out << "-" << obj.getA()
+		<< "-" << obj.getB()
+		<< "-" << obj.getC()
+		<< "-" << obj.getH();
 
 	return out;
 }

@@ -6,7 +6,7 @@ using namespace std;
 int main()
 {
 	Triangle t1(12, 13, 14, 100);
-	cout << "t1: \n" << t1;
+	cout << "t1: \n" << t1 << "\n";
 
 	Triangle t2;
 	cin >> t2;
