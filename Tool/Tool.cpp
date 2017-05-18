@@ -64,7 +64,7 @@ void Tool::setRecordNum(int recordNum)
 	this->recordNum = recordNum;
 }
 
-void Tool::print()
+void Tool::print() const
 {
 	cout << left << setw(5) << getRecordNum()
 				  << setw(11) << getName()

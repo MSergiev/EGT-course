@@ -12,22 +12,23 @@ class ToolShed
 public:
 	ToolShed();
 	~ToolShed();
+	Tool operator[](int);
 public:
-	void clearFile();
+	void createFile();
 	void addTool();
 	void updateTool();
-	void printAll();
+	void printAll() const;
+	void printByID(int) const;
 	void deleteTool();
 public:
-	int totalCount();
-	Tool leastCount();
-	Tool mostCount();
-	Tool leastCost();
-	Tool mostCost();
+	int totalCount() const;
+	Tool leastCount() const;
+	Tool mostCount() const;
+	Tool leastCost() const;
+	Tool mostCost() const;
 private:
 	Tool createTool();
-	void printHeader();
-	void init();
+	void printHeader() const;
 	void updateVector();
 	void emptyVector();
 private:

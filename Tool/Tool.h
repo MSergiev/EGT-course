@@ -19,7 +19,7 @@ public:
 	int getRecordNum() const;
 	void setRecordNum(int recordNum);
 public:
-	void print();
+	void print() const;
 private:
 	int recordNum;
 	char name[10];

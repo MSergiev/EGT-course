@@ -10,11 +10,8 @@ int main()
 	store.printAll();
 
 	cout << "\n"
-		 << "Total count: " << store.totalCount() << "\n"
-		 << "Least count: " << store.leastCount().getCount() << "\n"
-		 << "Most count: " << store.mostCount().getCount() << "\n"
-		 << "Least cost: " << store.leastCost().getCost() << "\n"
-		 << "Most cost: " << store.mostCost().getCost() << "\n";
+		 << "Total count: " << store.totalCount() << "\n";
+	store.printByID(store.leastCount().getRecordNum());
 
 	return 0;
 }

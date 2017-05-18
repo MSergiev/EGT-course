@@ -20,7 +20,7 @@ ToolShed::ToolShed()
 		updateVector();
 	}
 	else
-		clearFile();
+		createFile();
 }
 
 ToolShed::~ToolShed()
@@ -28,9 +28,21 @@ ToolShed::~ToolShed()
 	inOutTool.close();
 }
 
-void ToolShed::clearFile()
+void ToolShed::createFile()
 {
-	init();
+	ofstream outTool("hardware.dat", ios::binary);
+
+	if(!outTool)
+	{
+	  std::cerr << "File could not be opened/created." << "\n";
+	  return;
+	}
+
+	Tool temp;
+
+	for(int i = 0; i < 100; i++)
+		outTool.write(reinterpret_cast <const char*> (&temp), sizeof(Tool));
+	updateVector();
 }
 
 void ToolShed::addTool()
@@ -72,7 +84,7 @@ void ToolShed::updateTool()
 	}
 }
 
-void ToolShed::printAll()
+void ToolShed::printAll() const
 {
 	/*inOutTool.seekg(0);
 	printHeader();
@@ -91,7 +103,7 @@ void ToolShed::printAll()
 		}
 	}*/
 	printHeader();
-	for(vector<Tool>::iterator it = storage.begin(); it != storage.end(); it++)
+	for(vector<Tool>::const_iterator it = storage.begin(); it != storage.end(); it++)
 		it->print();
 }
 
@@ -139,26 +151,9 @@ Tool ToolShed::createTool()
 	return result;
 }
 
-void ToolShed::printHeader()
+void ToolShed::printHeader() const
 {
 	cout << "ID   Name       Count   Cost\n";
-}
-
-void ToolShed::init()
-{
-	ofstream outTool("hardware.dat", ios::binary);
-
-	if(!outTool)
-	{
-	  std::cerr << "File could not be opened/created." << "\n";
-	  return;
-	}
-
-	Tool temp;
-
-	for(int i = 0; i < 100; i++)
-		outTool.write(reinterpret_cast <const char*> (&temp), sizeof(Tool));
-	updateVector();
 }
 
 void ToolShed::updateVector()
@@ -179,22 +174,22 @@ void ToolShed::updateVector()
 	}
 }
 
-int ToolShed::totalCount()
+int ToolShed::totalCount() const
 {
 	int result = 0;
 
-	for(vector<Tool>::iterator it = storage.begin(); it != storage.end(); it++)
+	for(vector<Tool>::const_iterator it = storage.begin(); it != storage.end(); it++)
 		result += it->getCount();
 
 	return result;
 }
 
-Tool ToolShed::leastCount()
+Tool ToolShed::leastCount() const
 {
 	Tool result;
 	int min = 99999999;
 
-	for(vector<Tool>::iterator it = storage.begin(); it != storage.end(); it++)
+	for(vector<Tool>::const_iterator it = storage.begin(); it != storage.end(); it++)
 		if(min > it->getCount())
 		{
 			min = it->getCount();
@@ -203,12 +198,12 @@ Tool ToolShed::leastCount()
 	return result;
 }
 
-Tool ToolShed::mostCount()
+Tool ToolShed::mostCount() const
 {
 	Tool result;
 	int max = 0;
 
-	for(vector<Tool>::iterator it = storage.begin(); it != storage.end(); it++)
+	for(vector<Tool>::const_iterator it = storage.begin(); it != storage.end(); it++)
 		if(max < it->getCount())
 		{
 			max = it->getCount();
@@ -217,12 +212,12 @@ Tool ToolShed::mostCount()
 	return result;
 }
 
-Tool ToolShed::leastCost()
+Tool ToolShed::leastCost() const
 {
 	Tool result;
 	int min = 99999999;
 
-	for(vector<Tool>::iterator it = storage.begin(); it != storage.end(); it++)
+	for(vector<Tool>::const_iterator it = storage.begin(); it != storage.end(); it++)
 		if(min > it->getCost())
 		{
 			min = it->getCost();
@@ -231,12 +226,12 @@ Tool ToolShed::leastCost()
 	return result;
 }
 
-Tool ToolShed::mostCost()
+Tool ToolShed::mostCost() const
 {
 	Tool result;
 	int max = 0;
 
-	for(vector<Tool>::iterator it = storage.begin(); it != storage.end(); it++)
+	for(vector<Tool>::const_iterator it = storage.begin(); it != storage.end(); it++)
 		if(max < it->getCost())
 		{
 			max = it->getCost();
@@ -251,18 +246,17 @@ void ToolShed::emptyVector()
 		storage.pop_back();
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
+void ToolShed::printByID(int ID) const
+{
+	for(vector<Tool>::const_iterator it = storage.begin(); it != storage.end(); it++)
+		if(ID == it->getRecordNum())
+		{
+			printHeader();
+			it->print();
+			return;
+		}
+	cout << "No such ID was found.\n";
+}
 
 
 
