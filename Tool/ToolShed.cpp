@@ -240,6 +240,19 @@ Tool ToolShed::mostCost() const
 	return result;
 }
 
+Tool ToolShed::operator [](int ID)
+{
+	Tool result;
+	for(vector<Tool>::iterator it = storage.begin(); it != storage.end(); it++)
+		if(ID == it->getRecordNum())
+		{
+			result = (*it);
+			return result;
+		}
+	return result;
+
+}
+
 void ToolShed::emptyVector()
 {
 	while(!storage.empty())
