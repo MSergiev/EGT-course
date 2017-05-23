@@ -1,0 +1,1 @@
+ToolShed class stores and works with a binary file hardware.dat to keep track and process up to 100 different tools.
