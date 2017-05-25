@@ -1,0 +1,2 @@
+XML sample project using pugixml parser.
+Reads and stores data from .xml and makes .xml files from stored data.
