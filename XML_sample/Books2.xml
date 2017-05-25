@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<Books>
+	<Book>
+		<title>XML Developer's Guide</title>
+		<author>Gambardella, Matthew</author>
+		<year>2000</year>
+		<price>44.95</price>
+	</Book>
+	<Book>
+		<title>Midnight Rain</title>
+		<author>Ralls, Kim</author>
+		<year>2003</year>
+		<price>5.95</price>
+	</Book>
+	<Book>
+		<title>Maeve Ascendant</title>
+		<author>Corets, Eva</author>
+		<year>2008</year>
+		<price>6.8</price>
+	</Book>
+	<Book>
+		<title>Lover Birds</title>
+		<author>Randall, Cynthia</author>
+		<year>2002</year>
+		<price>4.65</price>
+	</Book>
+	<Book>
+		<title>Splish Splash</title>
+		<author>Thurman, Paula</author>
+		<year>2013</year>
+		<price>20.3</price>
+	</Book>
+</Books>
