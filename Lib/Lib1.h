@@ -12,6 +12,9 @@ using std::setw;
 using std::setprecision;
 #include <cmath>
 using std::pow;
+#include <ctime>
+#include <cstdlib>
+#include <algorithm>
 
 
 // 1. lib function that formats a currency appropriately (and returns a string)
@@ -36,6 +39,19 @@ double _fcalcRight( double, int );
 // 4. lib function that produces quotient and reminder (returning struct)
 struct divResult;
 divResult divide( int, int );
+// 5. lib functions to help with random stuff: picking a number from a range, picking a double,
+// selecting one or many items from an array, shuffling array, random queue (put
+// elements, remove random); later -- abstract out the random generator from the
+// functions (2 layer arch)
+int picker( int, int );
+int intRNG();
+double doubleRNG();
+void shuffleArr( int*, int );
+int* returnFromArr( int*, int, int );
+#include "RandomQueue.h"
+// 6. lib to evaluate a hand of cards(returning ENUM) – see poker rules , blackjack rules, other
+// card games rules
+
 
 
 
@@ -58,7 +74,7 @@ string format( double value, char currency )
 
 	for( int i = str.size(); i > 0; i-- )
 	{
-		if( str[i] == '.' )
+		if( str[ i ] == '.' )
 			for(i = i - 3; i > 0; i -= 3 )
 				str.insert( i, "," );
 	}
@@ -77,7 +93,7 @@ void arrPrint( T* matrix, int rows, int cols )
 	if( rows == 1 )
 	{
 		for( int i = 0; i < cols; i++ )
-			cout << setw( 8 ) << matrix[i];
+			cout << setw( 8 ) << matrix[ i ];
 
 		cout << "\n";
 	}
@@ -85,7 +101,7 @@ void arrPrint( T* matrix, int rows, int cols )
 		for( int i = 0; i < rows; i++ )
 		{
 			for( int j = 0; j < cols; j++ )
-				cout << setw( 8 ) << matrix[i][j];
+				cout << setw( 8 ) << matrix[ i ][ j ];
 
 			cout << "\n";
 		}
@@ -153,7 +169,7 @@ int _countDigitsRight( double num )
 
 	for( int i = str.size() - 1; i >= 0; i-- )
 	{
-		if( str[i] == '.' )
+		if( str[ i ] == '.' )
 			break;
 		result++;
 	}
@@ -199,11 +215,64 @@ struct divResult
 };
 divResult divide( int divident, int divisor )
 {
+	divResult result;
+	result.quotient = divident / divisor;
+	result.remainder = divident - ( divisor * result.quotient );
 
+	return result;
 }
 
+int picker( int begin, int end )
+{
+	int scope = end - begin;
 
+	int pick = intRNG() % ( scope + 1 );
+	pick += begin;
 
+	return pick;
+}
+
+int intRNG()
+{
+	static bool srand_on = false;
+	if( srand_on == false )
+	{
+		srand( time(0) );
+		srand_on = true;
+	}
+
+	int result = rand();
+	return result;
+}
+
+double doubleRNG()
+{
+	double result = (double)rand() / RAND_MAX;
+	return result;
+}
+
+void shuffleArr( int* arr, int size )
+{
+	std::random_shuffle( arr, arr + size );
+}
+
+int* returnFromArr( int* arr, int size, int return_size )
+{
+	int* result = new int[ return_size ];
+
+	int* temp = new int[ size ];
+	for( int i = 0; i < size; i++ )
+		temp[ i ] = arr[ i ];
+
+	shuffleArr( temp, size );
+
+	for( int i = 0; i < return_size; i++ )
+		result[ i ] = temp[ i ];
+
+	delete[] temp;
+
+	return result;
+}
 
 
 
