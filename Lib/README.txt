@@ -1,8 +1,7 @@
 lib1.h
 
 	(+)1. lib function that formats a currency appropriately (and returns a string)
-	(+)2. lib function that prints an array (initially specific types, later generic/template) or matrix,
-	including columns, spacing tweaking
+	(+)2. lib function that prints an array (initially specific types, later generic/template) or matrix, including columns, spacing tweaking
 	(+)3. lib function to round a double to a specific number of digits (including after / before
 	comma), that produces double (not string)
 	4. lib function that produces quotient and reminder (returning struct)
