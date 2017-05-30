@@ -51,6 +51,7 @@ int* returnFromArr( int*, int, int );
 #include "RandomQueue.h"
 // 6. lib to evaluate a hand of cards(returning ENUM) – see poker rules , blackjack rules, other
 // card games rules
+#include "Hand.h"
 
 
 

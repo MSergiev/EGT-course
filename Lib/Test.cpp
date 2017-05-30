@@ -6,8 +6,8 @@ using namespace std;
 int main()
 {
 	// Test for 1
-	//cout << format( 20484567, 'ˆ' );
-	//cout << format( 24704.607, 'ˆ' );
+	/*cout << format( 20484567, 'ˆ' );
+	cout << format( 24704.607, 'ˆ' );*/
 
 	// Test for 2
 	/*int arr[ 3 ][ 4 ] = { 123, 321, 4, 87654,
@@ -72,6 +72,25 @@ int main()
 
 	// Test for 6
 
+	/*Hand::Card cards[5];
+	cards[0].suit = SPADES;
+	cards[0].val = TEN;
+
+	cards[1].suit = CLUBS;
+	cards[1].val = EIGHT;
+
+	cards[2].suit = HEARTS;
+	cards[2].val = JACK;
+
+	cards[3].suit = SPADES;
+	cards[3].val = EIGHT;
+
+	cards[4].suit = DIAMONDS;
+	cards[4].val = TEN;
+
+	Hand hand(cards);
+
+	cout << hand.eval();*/
 
 
 

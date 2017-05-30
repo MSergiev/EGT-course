@@ -10,7 +10,7 @@ lib1.h
 	double,	selecting one or many items from an array, shuffling array, random queue (put
 	elements, remove random); later -- abstract out the random generator from the
 	functions (2 layer arch)
-	6. lib to evaluate a hand of cards(returning ENUM) – see poker rules , blackjack rules, other
-	card games rules
+	(+)6. lib to evaluate a hand of cards(returning ENUM) – see poker rules , blackjack rules,
+	other card games rules
 lib2.h
 //...
