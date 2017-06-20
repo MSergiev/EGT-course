@@ -19,31 +19,18 @@ Game::Game()
 
 	// Initialize SDL and quit if it fails
 	if( !init( window, renderer, SCREEN_WIDTH, SCREEN_HEIGHT ) )
-	{
-		printf( "Failed to initialize!\n" );
 		quit = true;
-	}
 	// Load media and quit if it fails
 	else if ( !loadMedia( font ) )
-	{
-		printf( "Failed to load media!\n" );
 		quit = true;
-	}
 	else
 		quit = false;
 
 	// Set score to 0
 	score = 0;
 
-	// Make score texture
-	scoreTexture = NULL;
-	genScoreTexture();
-
 	// Make textures from the font
-	textNext = NULL;
-	textScore = NULL;
-	genText( textNext, TEXT_NEXT );
-	genText( textScore, TEXT_SCORE );
+	genText();
 
 	// Set frequency/speed of shapes to drop
 	delay = TETRIS_DROP_RATE;
@@ -52,7 +39,7 @@ Game::Game()
 Game::~Game()
 {
 	// Quit SDL
-	close( window, renderer, font, textNext, textScore );
+	close( window, renderer, font );
 }
 
 void Game::eventHandler( SDL_Event e )
@@ -128,107 +115,23 @@ void Game::render()
 	SDL_RenderPresent( renderer );
 }
 
-void Game::genText( SDL_Texture*& texture, const char* text )
+void Game::genText()
 {
-	// Point to the width and height of the chosen texture
-	int* width;
-	int* height;
-
-	// If it's the texture for the Next shape block
-	if( texture == textNext )
-	{
-		width = &textNextWidth;
-		height = &textNextHeight;
-	}
-	// If it's the texture for the Score block
-	else if( texture == textScore )
-	{
-		width = &textScoreWidth;
-		height = &textScoreHeight;
-	}
-
-	// Make surfaces to get window format and rendered text
-	SDL_Surface* tempSurface_format = SDL_GetWindowSurface( window );
-	SDL_Surface* tempSurface_text = TTF_RenderText_Solid( font, text, SDL_Color{ 0xFF, 0xFF, 0xFF, 0xFF } );
-
-	// Optimize surface for window format
-	SDL_Surface* optimizedSurface = SDL_ConvertSurface( tempSurface_text, tempSurface_format->format, 0 );
-
-	// If failed
-	if( optimizedSurface == NULL )
-	{
-		printf( "Unable to optimize image \"%s\"! SDL Error: %s\n", text, SDL_GetError() );
-		quit = true;
-	}
-
-	// Get dimensions of the generated text
-	( *width ) = optimizedSurface->w;
-	( *height ) = optimizedSurface->h;
-
-	// Make texture from the surface
-	texture = SDL_CreateTextureFromSurface( renderer, optimizedSurface );
-
-	// If failed
-	if( texture == NULL )
-	{
-		printf( "Unable to create texture from rendered text \"%s\"! SDL Error: %s\n", text, SDL_GetError() );
-		quit = true;
-	}
-
-	// Free all used surfaces
-	SDL_FreeSurface( tempSurface_format );
-	SDL_FreeSurface( tempSurface_text );
-	SDL_FreeSurface( optimizedSurface );
-	tempSurface_format = NULL;
-	tempSurface_text = NULL;
-	optimizedSurface = NULL;
+	// Set up all textures
+	headerNext.remake( renderer, TEXT_NEXT, font );
+	headerScore.remake( renderer, TEXT_SCORE, font );
+	textureScore.remake( renderer, "0", font );
 }
 
-void Game::genScoreTexture()
+void Game::updateScore()
 {
-	// Destroy previous texture
-	SDL_DestroyTexture( scoreTexture );
-
 	// Transform score to string using stringstream
 	std::stringstream ss;
 	ss << score;
 	std::string scoreStr = ss.str();
 
-	// Make surfaces to get window format and rendered text
-	SDL_Surface* tempSurface_format = SDL_GetWindowSurface( window );
-	SDL_Surface* tempSurface_text = TTF_RenderText_Solid( font, scoreStr.c_str(), SDL_Color{ 0xFF, 0xFF, 0xFF, 0xFF } );
-
-	// Optimize surface for window format
-	SDL_Surface* optimizedSurface = SDL_ConvertSurface( tempSurface_text, tempSurface_format->format, 0 );
-
-	// If failed
-	if( optimizedSurface == NULL )
-	{
-		printf( "Unable to optimize image \"%s\"! SDL Error: %s\n", scoreStr.c_str(), SDL_GetError() );
-		quit = true;
-	}
-
-	// Get dimensions of the generated text
-	scoreTextureWidth = optimizedSurface->w;
-	scoreTextureHeight = optimizedSurface->h;
-
-	// Make texture from the surface
-	scoreTexture = SDL_CreateTextureFromSurface( renderer, optimizedSurface );
-
-	// If failed
-	if( scoreTexture == NULL )
-	{
-		printf( "Unable to create texture from rendered text \"%s\"! SDL Error: %s\n", scoreStr.c_str(), SDL_GetError() );
-		quit = true;
-	}
-
-	// Free all used surfaces
-	SDL_FreeSurface( tempSurface_format );
-	SDL_FreeSurface( tempSurface_text );
-	SDL_FreeSurface( optimizedSurface );
-	tempSurface_format = NULL;
-	tempSurface_text = NULL;
-	optimizedSurface = NULL;
+	// Remake the score texture
+	textureScore.remake( renderer, scoreStr.c_str(), font );
 }
 
 void Game::genNextShape()
@@ -274,17 +177,8 @@ void Game::renderNextShape()
 	SDL_SetRenderDrawColor( renderer, 0x69, 0x69, 0x69, 0xFF );
 	SDL_RenderDrawRect( renderer, &rect );
 
-	// Set up rectangle to print text within the block
-	rect.x += 3;
-	rect.y += 3;
-	rect.w = textNextWidth;
-	rect.h = textNextHeight;
-
-	// Set color to white
-	SDL_SetRenderDrawColor( renderer, 0x00, 0x00, 0x00, 0xFF );
-
-	// Render text
-	SDL_RenderCopy(renderer, textNext, NULL, &rect);
+	// Render header inside block
+	headerNext.render( renderer, rect.x + 3, rect.y + 3 );
 }
 
 void Game::renderShadow()
@@ -302,7 +196,6 @@ void Game::renderShadow()
 
 void Game::renderScore()
 {
-	genScoreTexture();
 	// Make a rectangle
 	SDL_Rect rect;
 
@@ -316,33 +209,21 @@ void Game::renderScore()
 	SDL_SetRenderDrawColor( renderer, 0x69, 0x69, 0x69, 0xFF );
 	SDL_RenderDrawRect(renderer, &rect);
 
-	// Set up rectangle to render text
-	rect.x += 3;
-	rect.y += 3;
-	rect.w = textScoreWidth;
-	rect.h = textScoreHeight;
-
-	// Set color to white
-	SDL_SetRenderDrawColor( renderer, 0x00, 0x00, 0x00, 0xFF );
-
-	// Render text
-	SDL_RenderCopy(renderer, textScore, NULL, &rect);
+	// Render header for score inside the block
+	headerScore.render( renderer, rect.x + 3, rect.y + 3 );
 
 	// Set up rectangle to print score
 	// Move y under the text
-	rect.y += textScoreHeight;
+	rect.y += headerScore.getHeight();
 	// Calculate middle of the remainder of the box
-	rect.y = ( rect.y + ( GAME_MATRIX_UPPERLEFT_Y + SHAPE_MATRIX_LENGTH * BLOCK_LENGTH ) - scoreTextureHeight ) / 2;
+	rect.y = ( rect.y + ( GAME_MATRIX_UPPERLEFT_Y + SHAPE_MATRIX_LENGTH * BLOCK_LENGTH ) - textureScore.getHeight() ) / 2;
 	// Return to the start of the box;
 	rect.x -= 3;
 	// Calculate middle of the box
-	rect.x = ( rect.x + rect.x + 2 * SHAPE_MATRIX_LENGTH * BLOCK_LENGTH - scoreTextureWidth ) / 2;
-
-	rect.w = scoreTextureWidth;
-	rect.h = scoreTextureHeight;
+	rect.x = ( rect.x + rect.x + 2 * SHAPE_MATRIX_LENGTH * BLOCK_LENGTH - textureScore.getWidth() ) / 2;
 
 	// Render score
-	SDL_RenderCopy(renderer, scoreTexture, NULL, &rect);
+	textureScore.render( renderer, rect.x, rect.y );
 }
 
 bool Game::shouldDrop()
@@ -395,7 +276,7 @@ bool Game::processFrame()
 			break;
 		}
 
-		genScoreTexture();
+		updateScore();
 	}
 
 	// If it's time to drop and the shape is lowered fully

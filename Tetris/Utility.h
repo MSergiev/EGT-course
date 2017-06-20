@@ -8,6 +8,6 @@
 
 bool init( SDL_Window*&, SDL_Renderer*&, const int, const int );
 bool loadMedia( TTF_Font*& );
-void close( SDL_Window*, SDL_Renderer*, TTF_Font*, SDL_Texture*, SDL_Texture* );
+void close( SDL_Window*, SDL_Renderer*, TTF_Font* );
 
 #endif /* UTILITY_H_ */

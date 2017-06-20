@@ -6,10 +6,10 @@
 #include "Utility.h"
 #include "Constants.h"
 #include "Matrix.h"
+#include "TextTexture.h"
 #include <ctime>
 #include <cstdlib>
 #include <sstream>
-#include <string>
 #include "Shape.h"
 
 // Class for the game Tetris
@@ -31,15 +31,11 @@ public:
 	// Renders on everything on screen
 	void render();
 private:
-	// Private copy constructor and operator = cause we don't want them to exist
-	Game( const Game& );
-	Game& operator=( const Game& );
-private:
 	// Generate text textures
-	void genText( SDL_Texture*&, const char* );
+	void genText();
 
 	// Generate score texture
-	void genScoreTexture();
+	void updateScore();
 
 	// Generates the next shape
 	void genNextShape();
@@ -84,15 +80,8 @@ private:
 	TTF_Font* font;
 
 	// Text
-	SDL_Texture* textNext;
-	SDL_Texture* textScore;
-
-	// Text dimensions ( to avoid stretching )
-	int textNextWidth;
-	int textNextHeight;
-
-	int textScoreWidth;
-	int textScoreHeight;
+	TextTexture headerNext;
+	TextTexture headerScore;
 
 	// Quit flag
 	bool quit;
@@ -112,11 +101,7 @@ private:
 	int score;
 
 	// Score texture
-	SDL_Texture* scoreTexture;
-
-	// Score texture dimensions
-	int scoreTextureWidth;
-	int scoreTextureHeight;
+	TextTexture textureScore;
 };
 
 #endif /* GAME_H_ */

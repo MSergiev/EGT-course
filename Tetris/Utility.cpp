@@ -55,18 +55,15 @@ bool loadMedia( TTF_Font*& font )
 	return success;
 }
 
-void close( SDL_Window* window, SDL_Renderer* renderer, TTF_Font* font, SDL_Texture* text1, SDL_Texture* text2 )
+void close( SDL_Window* window, SDL_Renderer* renderer, TTF_Font* font )
 {
 	TTF_CloseFont( font );
-	SDL_DestroyTexture( text1 );
-	SDL_DestroyTexture( text2 );
 	SDL_DestroyRenderer( renderer );
 	SDL_DestroyWindow( window );
+
 	window = NULL;
 	renderer = NULL;
 	font = NULL;
-	text1 = NULL;
-	text2 = NULL;
 
 	TTF_Quit();
 	SDL_Quit();
