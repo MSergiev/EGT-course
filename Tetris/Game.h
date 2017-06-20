@@ -3,14 +3,16 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
-#include "Utility.h"
-#include "Constants.h"
-#include "Matrix.h"
-#include "TextTexture.h"
 #include <ctime>
 #include <cstdlib>
 #include <sstream>
+
+#include "Utility.h"
+#include "Constants.h"
 #include "Shape.h"
+#include "Matrix.h"
+#include "TextTexture.h"
+#include "Button.h"
 
 // Class for the game Tetris
 class Game
@@ -48,6 +50,9 @@ private:
 
 	// Renders score
 	void renderScore();
+
+	// Render new game button
+	void renderButtonRestart();
 
 	// Calculates should the shape drop this frame
 	bool shouldDrop();
@@ -91,8 +96,8 @@ private:
 
 	// Current shape, it's shadow and the next shape
 	Shape shape;
-	Shape nextShape;
 	Shape shadow;
+	Shape nextShape;
 
 	// Delay counter to calculate on which frame should the shape drop
 	int delay;
@@ -102,6 +107,9 @@ private:
 
 	// Score texture
 	TextTexture textureScore;
+
+	// Buttons
+	Button buttonRestart;
 };
 
 #endif /* GAME_H_ */

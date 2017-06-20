@@ -18,7 +18,7 @@ Game::Game()
 	renderer = NULL;
 
 	// Initialize SDL and quit if it fails
-	if( !init( window, renderer, SCREEN_WIDTH, SCREEN_HEIGHT ) )
+	if( !init( window, renderer ) )
 		quit = true;
 	// Load media and quit if it fails
 	else if ( !loadMedia( font ) )
@@ -38,7 +38,12 @@ Game::Game()
 
 Game::~Game()
 {
-	// Quit SDL
+	// Destroy textures
+	headerNext.destroy();
+	headerScore.destroy();
+	textureScore.destroy();
+
+	// Destroy window, renderer and font and quit SDL
 	close( window, renderer, font );
 }
 
@@ -78,6 +83,41 @@ void Game::eventHandler( SDL_Event e )
 		// Render whatever was changed from a key press
 		render();
 	}
+	// If the mouse is clicked
+	else if( e.type == SDL_MOUSEBUTTONDOWN )
+	{
+		// Get current mouse coordinates
+		int x, y;
+		SDL_GetMouseState( &x, &y );
+
+		// If the mouse is on the restart button
+		if( buttonRestart.isIn( x, y ) )
+			// Press it
+			buttonRestart.press();
+
+		// Render whatever was changed from a mouse click
+		render();
+	}
+	else if( e.type == SDL_MOUSEBUTTONUP )
+	{
+		// Get current mouse coordinates
+		int x, y;
+		SDL_GetMouseState( &x, &y );
+
+		// If the mouse is on the restart button and was pressed
+		if( buttonRestart.isIn( x, y ) && buttonRestart.isPressed() )
+		{
+			// Release it
+			buttonRestart.release();
+
+			// TODO restart game
+		}
+
+		// TODO release all buttons
+
+		// Render whatever was changed from a mouse click
+		render();
+	}
 }
 
 bool Game::getQuit() const
@@ -111,6 +151,9 @@ void Game::render()
 	// Render score
 	renderScore();
 
+	// Render new game button
+	renderButtonRestart();
+
 	// Present the newly drawn frame on screen
 	SDL_RenderPresent( renderer );
 }
@@ -121,6 +164,7 @@ void Game::genText()
 	headerNext.remake( renderer, TEXT_NEXT, font );
 	headerScore.remake( renderer, TEXT_SCORE, font );
 	textureScore.remake( renderer, "0", font );
+	buttonRestart.remake( renderer, TEXT_RESTART, font );
 }
 
 void Game::updateScore()
@@ -224,6 +268,16 @@ void Game::renderScore()
 
 	// Render score
 	textureScore.render( renderer, rect.x, rect.y );
+}
+
+void Game::renderButtonRestart()
+{
+	// Calculate button position
+	int x = GAME_MATRIX_UPPERLEFT_X + ( GAME_MATRIX_WIDTH + SHAPE_MATRIX_LENGTH + 2 ) * BLOCK_LENGTH;
+	int y = GAME_MATRIX_UPPERLEFT_Y + 5 * BLOCK_LENGTH;
+
+	// Draw button
+	buttonRestart.render( renderer, x, y );
 }
 
 bool Game::shouldDrop()

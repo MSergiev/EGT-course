@@ -9,11 +9,7 @@ TextTexture::TextTexture()
 
 TextTexture::~TextTexture()
 {
-	SDL_DestroyTexture( pTexture );
-	pTexture = NULL;
-
-	textureWidth = 0;
-	textureHeight = 0;
+	destroy();
 }
 
 int TextTexture::getWidth()
@@ -45,8 +41,7 @@ void TextTexture::render( SDL_Renderer*& renderer, int x, int y )
 void TextTexture::remake( SDL_Renderer*& renderer, const char* text, TTF_Font*& font )
 {
 	// Destroy current texture
-	SDL_DestroyTexture( pTexture );
-	pTexture = NULL;
+	destroy();
 
 	// Make surfaces to get rendered text
 	SDL_Surface* tempSurface = TTF_RenderText_Solid( font, text, SDL_Color{ 0xFF, 0xFF, 0xFF, 0xFF } );
@@ -70,4 +65,13 @@ void TextTexture::remake( SDL_Renderer*& renderer, const char* text, TTF_Font*& 
 	// Free all used surfaces
 	SDL_FreeSurface( tempSurface );
 	tempSurface = NULL;
+}
+
+void TextTexture::destroy()
+{
+	SDL_DestroyTexture( pTexture );
+	pTexture = NULL;
+
+	textureWidth = 0;
+	textureHeight = 0;
 }

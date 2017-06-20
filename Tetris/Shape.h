@@ -1,8 +1,9 @@
 #ifndef SHAPE_H_
 #define SHAPE_H_
 
-#include "Constants.h"
 #include <SDL2/SDL.h>
+
+#include "Constants.h"
 
 // Class for the shapes in the game
 // 4x4 array with information on it's top-left coordinates and which of the blocks in the array are part of the shape

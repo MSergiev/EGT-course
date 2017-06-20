@@ -1,8 +1,8 @@
 #ifndef TEXTTEXTURE_H_
 #define TEXTTEXTURE_H_
 
-#include "SDL2/SDL.h"
-#include "SDL2/SDL_ttf.h"
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 #include <cstdio>
 
 // Stores textures and it's dimensions
@@ -13,19 +13,22 @@ public:
 	TextTexture();
 
 	// Destroy texture
-	~TextTexture();
+	virtual ~TextTexture();
 public:
 	// Returns texture width
-	int getWidth();
+	virtual int getWidth();
 
 	// Returns texture height
-	int getHeight();
+	virtual int getHeight();
 
 	// Render texture on given coordinates
-	void render( SDL_Renderer*&, int, int );
+	virtual void render( SDL_Renderer*&, int, int );
 
 	// Generate texture from text and font
-	void remake( SDL_Renderer*&, const char*, TTF_Font*& );
+	virtual void remake( SDL_Renderer*&, const char*, TTF_Font*& );
+
+	// Destroy texture
+	void destroy();
 
 private:
 	// Texture

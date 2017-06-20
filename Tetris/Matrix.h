@@ -2,6 +2,7 @@
 #define MATRIX_H_
 
 #include <SDL2/SDL.h>
+
 #include "Constants.h"
 #include "Shape.h"
 

@@ -9,7 +9,7 @@ const int SCREEN_HEIGHT = 650;
 // Font used
 const char FONT[] = "PressStart2P.ttf";
 
-// Font size
+// Font size ( consider block length and button padding )
 const int FONT_SIZE = 20;
 
 // Text for next shape
@@ -17,6 +17,12 @@ const char TEXT_NEXT[] = "Next:";
 
 // Text for score
 const char TEXT_SCORE[] = "Score:";
+
+// Text for restart button
+const char TEXT_RESTART[] = "New Game";
+
+// Button padding
+const int BUTTON_PADDING = 20;
 
 // Drop speed (on a 60Hz monitor)
 const int TETRIS_DROP_RATE = 45;
@@ -29,7 +35,7 @@ const int GAME_MATRIX_HEIGHT = 20;
 const int GAME_MATRIX_UPPERLEFT_X = 20;
 const int GAME_MATRIX_UPPERLEFT_Y = 20;
 
-// Tetris block size
+// Tetris block size ( consider font size and button padding )
 const int BLOCK_LENGTH = 30;
 
 // Tetris shape count
