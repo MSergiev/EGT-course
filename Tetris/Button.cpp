@@ -21,7 +21,7 @@ int Button::getWidth()
 
 int Button::getHeight()
 {
-	return button.w;
+	return button.h;
 }
 
 void Button::render( SDL_Renderer*& renderer, int x, int y )

@@ -25,7 +25,7 @@ public:
 	~Game();
 public:
 	// Handles events
-	void eventHandler( SDL_Event );
+	void eventHandler( SDL_Event& );
 
 	// Returns if the game's over
 	bool getQuit() const;
@@ -54,11 +54,29 @@ private:
 	// Render new game button
 	void renderButtonRestart();
 
+	// Render pause button
+	void renderButtonPause();
+
+	// Render exit button
+	void renderButtonExit();
+
+	// Release all buttons
+	void releaseButtons();
+
+	// Restart the game
+	void restart();
+
 	// Calculates should the shape drop this frame
 	bool shouldDrop();
 
 	// Calculates data about the frame
 	bool processFrame();
+
+	// Keyboard event handle
+	void keyEvent( SDL_Event& );
+
+	// Mouse click event handle
+	void mouseEvent( SDL_Event& );
 
 	// Action if UP is pressed
 	void spin();
@@ -91,6 +109,9 @@ private:
 	// Quit flag
 	bool quit;
 
+	// Pause flag
+	bool isPaused;
+
 	// Game matrix
 	Matrix matrix;
 
@@ -110,6 +131,8 @@ private:
 
 	// Buttons
 	Button buttonRestart;
+	Button buttonPause;
+	Button buttonExit;
 };
 
 #endif /* GAME_H_ */

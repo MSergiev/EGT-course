@@ -204,6 +204,15 @@ void Matrix::assimilate( Shape& shape )
 			}
 }
 
+void Matrix::clear()
+{
+	// Each element in the game matrix
+	for( int x = 0; x < GAME_MATRIX_WIDTH; x++ )
+		for( int y = 0; y < GAME_MATRIX_HEIGHT; y++ )
+			// Set it to empty
+			data[ x ][ y ] = '0';
+}
+
 int Matrix::pop()
 {
 	int removed = 0;

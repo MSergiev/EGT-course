@@ -26,6 +26,9 @@ Game::Game()
 	else
 		quit = false;
 
+	// Pause is off
+	isPaused = false;
+
 	// Set score to 0
 	score = 0;
 
@@ -47,77 +50,20 @@ Game::~Game()
 	close( window, renderer, font );
 }
 
-void Game::eventHandler( SDL_Event e )
+void Game::eventHandler( SDL_Event& e )
 {
 	// If player quits
 	if( e.type == SDL_QUIT )
 		// Quit the game
 		quit = true;
-	// If a key is pressed
-	else if( e.type == SDL_KEYDOWN )
-	{
-		switch( e.key.keysym.sym )
-		{
-		case SDLK_LEFT:
-			// Move shape one block left
-			moveLeft();
-			break;
-		case SDLK_RIGHT:
-			// Move shape one block right
-			moveRight();
-			break;
-		case SDLK_UP:
-			// Spin shape 90 degrees clockwise
-			spin();
-			break;
-		case SDLK_DOWN:
-			// Lower the shape one block
-			speedUp();
-			break;
-		case SDLK_SPACE:
-			// Slam the shape down
-			slam();
-			break;
-		}
-
-		// Render whatever was changed from a key press
-		render();
-	}
-	// If the mouse is clicked
-	else if( e.type == SDL_MOUSEBUTTONDOWN )
-	{
-		// Get current mouse coordinates
-		int x, y;
-		SDL_GetMouseState( &x, &y );
-
-		// If the mouse is on the restart button
-		if( buttonRestart.isIn( x, y ) )
-			// Press it
-			buttonRestart.press();
-
-		// Render whatever was changed from a mouse click
-		render();
-	}
-	else if( e.type == SDL_MOUSEBUTTONUP )
-	{
-		// Get current mouse coordinates
-		int x, y;
-		SDL_GetMouseState( &x, &y );
-
-		// If the mouse is on the restart button and was pressed
-		if( buttonRestart.isIn( x, y ) && buttonRestart.isPressed() )
-		{
-			// Release it
-			buttonRestart.release();
-
-			// TODO restart game
-		}
-
-		// TODO release all buttons
-
-		// Render whatever was changed from a mouse click
-		render();
-	}
+	// If a key is pressed and the game is not paused
+	else if( e.type == SDL_KEYDOWN && !isPaused )
+		// Handle the key event
+		keyEvent( e );
+	// If the mouse is clicked or released
+	else if( e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEBUTTONUP )
+		// Handle the mouse event
+		mouseEvent( e );
 }
 
 bool Game::getQuit() const
@@ -154,6 +100,12 @@ void Game::render()
 	// Render new game button
 	renderButtonRestart();
 
+	// Render pause button
+	renderButtonPause();
+
+	// Render exit button
+	renderButtonExit();
+
 	// Present the newly drawn frame on screen
 	SDL_RenderPresent( renderer );
 }
@@ -165,6 +117,8 @@ void Game::genText()
 	headerScore.remake( renderer, TEXT_SCORE, font );
 	textureScore.remake( renderer, "0", font );
 	buttonRestart.remake( renderer, TEXT_RESTART, font );
+	buttonPause.remake( renderer, TEXT_PAUSE, font );
+	buttonExit.remake( renderer, TEXT_EXIT, font );
 }
 
 void Game::updateScore()
@@ -280,8 +234,64 @@ void Game::renderButtonRestart()
 	buttonRestart.render( renderer, x, y );
 }
 
+void Game::renderButtonPause()
+{
+	// Calculate button position
+	int x = GAME_MATRIX_UPPERLEFT_X + ( GAME_MATRIX_WIDTH + SHAPE_MATRIX_LENGTH + 2 ) * BLOCK_LENGTH;
+	int y = GAME_MATRIX_UPPERLEFT_Y + 6 * BLOCK_LENGTH + buttonRestart.getHeight();
+
+	// Draw button
+	buttonPause.render( renderer, x, y );
+}
+
+void Game::renderButtonExit()
+{
+	// Calculate button position
+	int x = GAME_MATRIX_UPPERLEFT_X + ( GAME_MATRIX_WIDTH + SHAPE_MATRIX_LENGTH + 2 ) * BLOCK_LENGTH;
+	int y = GAME_MATRIX_UPPERLEFT_Y + 7 * BLOCK_LENGTH + buttonRestart.getHeight() + buttonPause.getHeight();
+
+	// Draw button
+	buttonExit.render( renderer, x, y );
+}
+
+void Game::releaseButtons()
+{
+	buttonRestart.release();
+	buttonPause.release();
+	buttonExit.release();
+}
+
+void Game::restart()
+{
+	// Reset score
+	score = 0;
+
+	// Empty field
+	matrix.clear();
+
+	// Resume game
+	isPaused = false;
+
+	// don't quit
+	quit = false;
+
+	// Reset delay
+	delay = TETRIS_DROP_RATE;
+
+	// Reset shape and shadow
+	shape.reset( static_cast<Shape::Type>( rand() % TOTAL_SHAPES ) );
+	shadow = shape;
+
+	// Generate next shape
+	genNextShape();
+}
+
 bool Game::shouldDrop()
 {
+	// If game is paused, don't drop or advance the delay
+	if( isPaused )
+		return false;
+
 	// Reset delay if it's time to drop ( if delay is at it's max )
 	if( delay == TETRIS_DROP_RATE )
 	{
@@ -355,6 +365,114 @@ bool Game::processFrame()
 
 	// Returns should the shape be lowered
 	return drop;
+}
+
+void Game::keyEvent( SDL_Event& e )
+{
+	// Take the pressed key
+	switch( e.key.keysym.sym )
+	{
+	case SDLK_LEFT:
+		// Move shape one block left
+		moveLeft();
+		break;
+	case SDLK_RIGHT:
+		// Move shape one block right
+		moveRight();
+		break;
+	case SDLK_UP:
+		// Spin shape 90 degrees clockwise
+		spin();
+		break;
+	case SDLK_DOWN:
+		// Lower the shape one block
+		speedUp();
+		break;
+	case SDLK_SPACE:
+		// Slam the shape down
+		slam();
+		break;
+	}
+
+	// Render whatever was changed from a key press
+	render();
+}
+
+void Game::mouseEvent( SDL_Event& e )
+{
+	if( e.type == SDL_MOUSEBUTTONDOWN )
+	{
+		// Get current mouse coordinates
+		int x, y;
+		SDL_GetMouseState( &x, &y );
+
+		// If the mouse is on the restart button
+		if( buttonRestart.isIn( x, y ) )
+			// Press it
+			buttonRestart.press();
+		// If the mouse is on the pause button
+		else if( buttonPause.isIn( x, y ) )
+			// Press it
+			buttonPause.press();
+		// If the mouse is on the exit button
+		else if( buttonExit.isIn( x, y ) )
+			// Press it
+			buttonExit.press();
+
+		// Render whatever was changed from a mouse click
+		render();
+	}
+	else if( e.type == SDL_MOUSEBUTTONUP )
+	{
+		// Get current mouse coordinates
+		int x, y;
+		SDL_GetMouseState( &x, &y );
+
+		// If the mouse is on the restart button and it was pressed
+		if( buttonRestart.isIn( x, y ) && buttonRestart.isPressed() )
+		{
+			// Release it
+			buttonRestart.release();
+
+			// Restart game
+			restart();
+		}
+		// If the mouse is on the pause button and it was pressed
+		else if( buttonPause.isIn( x, y ) && buttonPause.isPressed() )
+		{
+			// Release it
+			buttonPause.release();
+
+			// If it's paused
+			if( isPaused )
+			{
+				// Make the button "pause" then resume the game
+				buttonPause.remake( renderer, TEXT_PAUSE, font );
+				isPaused = false;
+			}
+			else
+			{
+				// Make the button "resume" then pause the game
+				buttonPause.remake( renderer, TEXT_RESUME, font );
+				isPaused = true;
+			}
+		}
+		// If the mouse is on the exit button and it was pressed
+		else if( buttonExit.isIn( x, y ) && buttonExit.isPressed() )
+		{
+			// Release it
+			buttonExit.release();
+
+			// Quit the game
+			quit = true;
+		}
+
+		// Release all buttons
+		releaseButtons();
+
+		// Render whatever was changed from a mouse click
+		render();
+	}
 }
 
 void Game::spin()

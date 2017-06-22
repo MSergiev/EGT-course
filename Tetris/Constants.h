@@ -7,7 +7,7 @@ const int SCREEN_WIDTH = 750;
 const int SCREEN_HEIGHT = 650;
 
 // Font used
-const char FONT[] = "PressStart2P.ttf";
+const char FONT[] = "font/PressStart2P.ttf";
 
 // Font size ( consider block length and button padding )
 const int FONT_SIZE = 20;
@@ -21,10 +21,17 @@ const char TEXT_SCORE[] = "Score:";
 // Text for restart button
 const char TEXT_RESTART[] = "New Game";
 
+// Text for pause button
+const char TEXT_PAUSE[] = "Pause";
+const char TEXT_RESUME[] = "Resume";
+
+// Text for exit button
+const char TEXT_EXIT[] = "Exit";
+
 // Button padding
 const int BUTTON_PADDING = 20;
 
-// Drop speed (on a 60Hz monitor)
+// Drop speed ( on a 60Hz monitor )
 const int TETRIS_DROP_RATE = 45;
 
 // Tetris field size

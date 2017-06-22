@@ -30,6 +30,9 @@ public:
 	// Add a shape to the game matrix
 	void assimilate( Shape& );
 
+	// Clear the matrix
+	void clear();
+
 	// Check for full lines, remove them and returns how many were removed
 	int pop();
 
