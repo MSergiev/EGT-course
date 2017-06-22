@@ -145,27 +145,8 @@ void Game::renderNextShape()
 	// Render next shape without dropping it
 	nextShape.render( renderer, false );
 
-	// Set up a rectangle with block size
-	SDL_Rect rect;
-	rect.w = BLOCK_LENGTH;
-	rect.h = BLOCK_LENGTH;
-
-	// Set draw color to black
-	SDL_SetRenderDrawColor( renderer, 0x00, 0x00, 0x00, 0xFF );
-
-	// For each block in the shape matrix
-	for( int curX = 0; curX < SHAPE_MATRIX_LENGTH; curX++ )
-		for( int curY = 0; curY < SHAPE_MATRIX_LENGTH; curY++ )
-		{
-			// Set up rectangle at appropriate location
-			rect.x = nextShape.getX() + curX * BLOCK_LENGTH;
-			rect.y = nextShape.getY() + curY * BLOCK_LENGTH;
-
-			// Render the rectangle outline
-			SDL_RenderDrawRect( renderer, &rect );
-		}
-
 	// Set rectangle to match the whole next shape block
+	SDL_Rect rect;
 	rect.x = nextShape.getX();
 	rect.y = nextShape.getY();
 	rect.w = SHAPE_MATRIX_LENGTH * BLOCK_LENGTH;

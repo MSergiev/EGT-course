@@ -15,18 +15,18 @@ Matrix::~Matrix()
 
 void Matrix::render( SDL_Renderer*& pRenderer )
 {
-	// Make a rectangle with a size of a block
+	// Make a rectangle with a size fitting inside a block
 	SDL_Rect rect;
-	rect.w = BLOCK_LENGTH;
-	rect.h = BLOCK_LENGTH;
+	rect.w = BLOCK_LENGTH - 2;
+	rect.h = BLOCK_LENGTH - 2;
 
 	// For each element in the game matrix
 	for( int curX = 0; curX < GAME_MATRIX_WIDTH; curX++ )
 		for( int curY = 0; curY < GAME_MATRIX_HEIGHT; curY++ )
 		{
 			// Set rectangle position to according position of the current element of the game matrix
-			rect.x = GAME_MATRIX_UPPERLEFT_X + curX * BLOCK_LENGTH;
-			rect.y = GAME_MATRIX_UPPERLEFT_Y + curY * BLOCK_LENGTH;
+			rect.x = GAME_MATRIX_UPPERLEFT_X + curX * BLOCK_LENGTH + 1;
+			rect.y = GAME_MATRIX_UPPERLEFT_Y + curY * BLOCK_LENGTH + 1;
 
 			// Fill a rectangle of an appropriate color based on the game matrix
 			switch( data[ curX ][ curY ] )
@@ -72,10 +72,6 @@ void Matrix::render( SDL_Renderer*& pRenderer )
 				SDL_RenderFillRect( pRenderer, &rect );
 				break;
 			}
-
-			// Draw a black outline
-			SDL_SetRenderDrawColor( pRenderer, 0x00, 0x00, 0x00, 0xFF );
-			SDL_RenderDrawRect( pRenderer, &rect );
 		}
 
 	// Set rectangle to cover the whole game matrix

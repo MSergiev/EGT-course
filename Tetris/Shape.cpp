@@ -69,12 +69,12 @@ void Shape::render( SDL_Renderer*& pRenderer, bool drop )
 			// If it's part of the shape
 			if( temp != '0' )
 			{
-				// Make a rectangle on it's position with the size of a block
+				// Make a rectangle on it's position in a way that it'll fit 1px within the block
 				SDL_Rect rect;
-				rect.x = x + rX * BLOCK_LENGTH;
-				rect.y = y + rY * BLOCK_LENGTH;
-				rect.w = BLOCK_LENGTH;
-				rect.h = BLOCK_LENGTH;
+				rect.x = x + rX * BLOCK_LENGTH + 1;
+				rect.y = y + rY * BLOCK_LENGTH + 1;
+				rect.w = BLOCK_LENGTH - 2;
+				rect.h = BLOCK_LENGTH - 2;
 
 				// Fill the rectangle
 				SDL_RenderFillRect( pRenderer, &rect );
