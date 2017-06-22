@@ -9,19 +9,24 @@ Game::Game()
 	shape.reset( static_cast<Shape::Type>( rand() % TOTAL_SHAPES ) );
 
 	// Copy shape into shadow
-	shadow = shape;
+	shadowShape = shape;
 
 	// Generate next shape
 	genNextShape();
 
-	window = NULL;
-	renderer = NULL;
+	// Held shape is NONE and in hold block
+	heldShape.reset( Shape::NONE,
+					 GAME_MATRIX_UPPERLEFT_X + ( GAME_MATRIX_WIDTH + 1 ) * BLOCK_LENGTH,
+					 GAME_MATRIX_UPPERLEFT_Y + (SHAPE_MATRIX_LENGTH + 1 ) * BLOCK_LENGTH );
 
 	// Initialize SDL and quit if it fails
+	window = NULL;
+	renderer = NULL;
 	if( !init( window, renderer ) )
 		quit = true;
+
 	// Load media and quit if it fails
-	else if ( !loadMedia( font ) )
+	else if ( !loadFont( font ) )
 		quit = true;
 	else
 		quit = false;
@@ -44,7 +49,11 @@ Game::~Game()
 	// Destroy textures
 	headerNext.destroy();
 	headerScore.destroy();
+	headerHeld.destroy();
 	textureScore.destroy();
+	buttonRestart.destroy();
+	buttonPause.destroy();
+	buttonExit.destroy();
 
 	// Destroy window, renderer and font and quit SDL
 	close( window, renderer, font );
@@ -94,6 +103,9 @@ void Game::render()
 	// Render the next shape
 	renderNextShape();
 
+	// Render the held shape
+	renderHeldShape();
+
 	// Render score
 	renderScore();
 
@@ -112,9 +124,10 @@ void Game::render()
 
 void Game::genText()
 {
-	// Set up all textures
+	// Set up all text textures
 	headerNext.remake( renderer, TEXT_NEXT, font );
 	headerScore.remake( renderer, TEXT_SCORE, font );
+	headerHeld.remake( renderer, TEXT_HOLD, font );
 	textureScore.remake( renderer, "0", font );
 	buttonRestart.remake( renderer, TEXT_RESTART, font );
 	buttonPause.remake( renderer, TEXT_PAUSE, font );
@@ -160,17 +173,37 @@ void Game::renderNextShape()
 	headerNext.render( renderer, rect.x + 3, rect.y + 3 );
 }
 
+void Game::renderHeldShape()
+{
+	// Render next shape without dropping it
+	heldShape.render( renderer, false );
+
+	// Set rectangle to match the whole held shape block
+	SDL_Rect rect;
+	rect.x = heldShape.getX();
+	rect.y = heldShape.getY();
+	rect.w = SHAPE_MATRIX_LENGTH * BLOCK_LENGTH;
+	rect.h = SHAPE_MATRIX_LENGTH * BLOCK_LENGTH;
+
+	// Set color to gray and draw it's outline
+	SDL_SetRenderDrawColor( renderer, 0x69, 0x69, 0x69, 0xFF );
+	SDL_RenderDrawRect( renderer, &rect );
+
+	// Render header inside block
+	headerHeld.render( renderer, rect.x + 3, rect.y + 3 );
+}
+
 void Game::renderShadow()
 {
 	// Copy current shape into shadow
-	shadow = shape;
+	shadowShape = shape;
 
 	// Move shadow down the matrix till it clashes with something in the game matrix
-	while( !matrix.isOn( shadow, DOWN ) )
-		shadow.move( DOWN );
+	while( !matrix.isOn( shadowShape, DOWN ) )
+		shadowShape.move( DOWN );
 
 	// Render the shape as a shadow
-	shadow.renderShadow( renderer );
+	shadowShape.renderShadow( renderer );
 }
 
 void Game::renderScore()
@@ -261,7 +294,7 @@ void Game::restart()
 
 	// Reset shape and shadow
 	shape.reset( static_cast<Shape::Type>( rand() % TOTAL_SHAPES ) );
-	shadow = shape;
+	shadowShape = shape;
 
 	// Generate next shape
 	genNextShape();
@@ -338,7 +371,7 @@ bool Game::processFrame()
 		shape.reset( nextShape.getType() );
 
 		// Copies it to shadow
-		shadow = shape;
+		shadowShape = shape;
 
 		// Generates next shape
 		genNextShape();
@@ -373,6 +406,9 @@ void Game::keyEvent( SDL_Event& e )
 		// Slam the shape down
 		slam();
 		break;
+	case SDLK_z:
+		// Hold/Release shape
+		hold();
 	}
 
 	// Render whatever was changed from a key press
@@ -507,10 +543,40 @@ void Game::moveRight()
 void Game::slam()
 {
 	// Put current shape down to it's shadow's position
-	shape = shadow;
+	shape = shadowShape;
 
 	// Set delay to it's max so next frame will try dropping it and will assimilate it into the game matrix
 	delay = TETRIS_DROP_RATE;
+}
+
+void Game::hold()
+{
+	// If we're not holding a shape
+	if( heldShape.getType() == Shape::NONE )
+	{
+		// Grab current shape
+		heldShape.reset( shape.getType(),
+						 GAME_MATRIX_UPPERLEFT_X + ( GAME_MATRIX_WIDTH + 1 ) * BLOCK_LENGTH,
+						 GAME_MATRIX_UPPERLEFT_Y + (SHAPE_MATRIX_LENGTH + 1 ) * BLOCK_LENGTH );
+
+		// Move on to the next one
+		shape.reset( nextShape.getType() );
+		//shadowShape = shape;
+
+		// Generate next shape
+		genNextShape();
+	}
+	// If we're holding a shape
+	else
+	{
+		// Give currently held shape
+		shape.reset( heldShape.getType() );
+
+		// Empty held shape
+		heldShape.reset( Shape::NONE,
+						 GAME_MATRIX_UPPERLEFT_X + ( GAME_MATRIX_WIDTH + 1 ) * BLOCK_LENGTH,
+						 GAME_MATRIX_UPPERLEFT_Y + (SHAPE_MATRIX_LENGTH + 1 ) * BLOCK_LENGTH );
+	}
 }
 
 

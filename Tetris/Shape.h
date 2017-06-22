@@ -11,7 +11,7 @@ class Shape
 {
 public:
 	// Enum for types of shapes
-	enum Type { I, J, L, O, S, T, Z };
+	enum Type { NONE = -1, I, J, L, O, S, T, Z };
 
 	// Enum for shape rotation
 	enum Rotation { ROTATION_0, ROTATION_90, ROTATION_180, ROTATION_270 };
@@ -56,6 +56,9 @@ public:
 private:
 	// Sets type and starting position at top of the game matrix
 	void init( Shape::Type );
+
+	// Decides on render color
+	void decideColor( SDL_Renderer*& );
 private:
 	// Type of the shape
 	Type type;

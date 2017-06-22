@@ -13,3 +13,5 @@ Implemented so far:
 - Show and calculate score
 - Speed up shape drop
 - Slam shape down
+- Hold shape
+- Menu

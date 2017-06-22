@@ -11,7 +11,7 @@
 bool init( SDL_Window*&, SDL_Renderer*& );
 
 // Load media associated with the application
-bool loadMedia( TTF_Font*& );
+bool loadFont( TTF_Font*& );
 
 // Destroy window, renderer and font and quit SDL and it's subsystems
 void close( SDL_Window*, SDL_Renderer*, TTF_Font* );

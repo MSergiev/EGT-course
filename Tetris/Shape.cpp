@@ -19,45 +19,19 @@ Shape::Type Shape::getType()
 	return type;
 }
 
-void Shape::render( SDL_Renderer*& pRenderer, bool drop )
+void Shape::render( SDL_Renderer*& renderer, bool drop )
 {
+	// Don't render if shape is NONE
+	if( type == NONE )
+		return;
+
 	// If we want the shape to drop
 	if( drop )
 		// Drop shape by one block
 		y += BLOCK_LENGTH;
 
 	// Decide on color to draw with
-	switch( type )
-	{
-	case I:
-		// Teal
-		SDL_SetRenderDrawColor( pRenderer, 0x00, 0xFF, 0xFF, 0xFF );
-		break;
-	case J:
-		// Blue
-		SDL_SetRenderDrawColor( pRenderer, 0x00, 0x00, 0xFF, 0xFF );
-		break;
-	case L:
-		// Orange
-		SDL_SetRenderDrawColor( pRenderer, 0xFF, 0x8C, 0x00, 0xFF );
-		break;
-	case O:
-		// Yellow
-		SDL_SetRenderDrawColor( pRenderer, 0xFF, 0xFF, 0x00, 0xFF );
-		break;
-	case S:
-		// Green
-		SDL_SetRenderDrawColor( pRenderer, 0x00, 0xFF, 0x00, 0xFF );
-		break;
-	case T:
-		// Purple
-		SDL_SetRenderDrawColor( pRenderer, 0x8B, 0x00, 0x8B, 0xFF );
-		break;
-	case Z:
-		// Red
-		SDL_SetRenderDrawColor( pRenderer, 0xFF, 0x00, 0x00, 0xFF );
-		break;
-	}
+	decideColor( renderer );
 
 	// Go over the 4x4 rotation map and through it, read the coordinates of the shape in proper order to simulate the rotation
 	for( int rY = 0; rY < SHAPE_MATRIX_LENGTH; rY++ )
@@ -77,45 +51,19 @@ void Shape::render( SDL_Renderer*& pRenderer, bool drop )
 				rect.h = BLOCK_LENGTH - 2;
 
 				// Fill the rectangle
-				SDL_RenderFillRect( pRenderer, &rect );
+				SDL_RenderFillRect( renderer, &rect );
 			}
 		}
 }
 
-void Shape::renderShadow( SDL_Renderer*& pRenderer )
+void Shape::renderShadow( SDL_Renderer*& renderer )
 {
+	// Don't render if shape is NONE
+	if( type == NONE )
+		return;
+
 	// Decide on color to draw with
-	switch( type )
-	{
-	case I:
-		// Teal
-		SDL_SetRenderDrawColor( pRenderer, 0x00, 0xFF, 0xFF, 0xFF );
-		break;
-	case J:
-		// Blue
-		SDL_SetRenderDrawColor( pRenderer, 0x00, 0x00, 0xFF, 0xFF );
-		break;
-	case L:
-		// Orange
-		SDL_SetRenderDrawColor( pRenderer, 0xFF, 0x8C, 0x00, 0xFF );
-		break;
-	case O:
-		// Yellow
-		SDL_SetRenderDrawColor( pRenderer, 0xFF, 0xFF, 0x00, 0xFF );
-		break;
-	case S:
-		// Green
-		SDL_SetRenderDrawColor( pRenderer, 0x00, 0xFF, 0x00, 0xFF );
-		break;
-	case T:
-		// Purple
-		SDL_SetRenderDrawColor( pRenderer, 0x8B, 0x00, 0x8B, 0xFF );
-		break;
-	case Z:
-		// Red
-		SDL_SetRenderDrawColor( pRenderer, 0xFF, 0x00, 0x00, 0xFF );
-		break;
-	}
+	decideColor( renderer );
 
 	// Go over the 4x4 rotation map and through it, read the coordinates of the shape in proper order to simulate the rotation
 	for( int rY = 0; rY < SHAPE_MATRIX_LENGTH; rY++ )
@@ -135,7 +83,7 @@ void Shape::renderShadow( SDL_Renderer*& pRenderer )
 				rect.h = BLOCK_LENGTH - 2;
 
 				// Draw rectangle outline
-				SDL_RenderDrawRect( pRenderer, &rect );
+				SDL_RenderDrawRect( renderer, &rect );
 			}
 		}
 }
@@ -222,7 +170,40 @@ void Shape::init( Shape::Type newType )
 	rRotation = static_cast<Shape::Rotation> ( iRotation );
 }
 
-
+void Shape::decideColor( SDL_Renderer*& renderer )
+{
+	switch( type )
+	{
+	case I:
+		// Teal
+		SDL_SetRenderDrawColor( renderer, 0x00, 0xFF, 0xFF, 0xFF );
+		break;
+	case J:
+		// Blue
+		SDL_SetRenderDrawColor( renderer, 0x00, 0x00, 0xFF, 0xFF );
+		break;
+	case L:
+		// Orange
+		SDL_SetRenderDrawColor( renderer, 0xFF, 0x8C, 0x00, 0xFF );
+		break;
+	case O:
+		// Yellow
+		SDL_SetRenderDrawColor( renderer, 0xFF, 0xFF, 0x00, 0xFF );
+		break;
+	case S:
+		// Green
+		SDL_SetRenderDrawColor( renderer, 0x00, 0xFF, 0x00, 0xFF );
+		break;
+	case T:
+		// Purple
+		SDL_SetRenderDrawColor( renderer, 0x8B, 0x00, 0x8B, 0xFF );
+		break;
+	case Z:
+		// Red
+		SDL_SetRenderDrawColor( renderer, 0xFF, 0x00, 0x00, 0xFF );
+		break;
+	}
+}
 
 
 

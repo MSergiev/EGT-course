@@ -45,6 +45,9 @@ private:
 	// Renders the next shape
 	void renderNextShape();
 
+	// Renders held shape
+	void renderHeldShape();
+
 	// Renders the shadow
 	void renderShadow();
 
@@ -93,6 +96,9 @@ private:
 	// Action if SPACE is pressed
 	void slam();
 
+	// Action if Z is pressed
+	void hold();
+
 
 private:
 	// Window and it's renderer for the game
@@ -105,6 +111,7 @@ private:
 	// Text
 	TextTexture headerNext;
 	TextTexture headerScore;
+	TextTexture headerHeld;
 
 	// Quit flag
 	bool quit;
@@ -115,10 +122,11 @@ private:
 	// Game matrix
 	Matrix matrix;
 
-	// Current shape, it's shadow and the next shape
+	// Current shape, it's shadow, next shape and the held shape
 	Shape shape;
-	Shape shadow;
+	Shape shadowShape;
 	Shape nextShape;
+	Shape heldShape;
 
 	// Delay counter to calculate on which frame should the shape drop
 	int delay;

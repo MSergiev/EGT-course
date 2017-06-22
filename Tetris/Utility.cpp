@@ -45,7 +45,7 @@ bool init( SDL_Window*& window, SDL_Renderer*& renderer )
 	return result;
 }
 
-bool loadMedia( TTF_Font*& font )
+bool loadFont( TTF_Font*& font )
 {
 	// End result
 	bool result = true;

@@ -15,6 +15,9 @@ const int FONT_SIZE = 20;
 // Text for next shape
 const char TEXT_NEXT[] = "Next:";
 
+// Text for held shape
+const char TEXT_HOLD[] = "Held:";
+
 // Text for score
 const char TEXT_SCORE[] = "Score:";
 
