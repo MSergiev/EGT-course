@@ -55,49 +55,49 @@ const int TOTAL_SHAPES = 7;
 const int SHAPE_MATRIX_LENGTH = 4;
 
 // Tetris shapes
-const char SHAPES[ TOTAL_SHAPES ][ SHAPE_MATRIX_LENGTH ][ SHAPE_MATRIX_LENGTH ] =
+const bool SHAPES[ TOTAL_SHAPES ][ SHAPE_MATRIX_LENGTH ][ SHAPE_MATRIX_LENGTH ] =
 {
 	{// I shape
-		{ '0', '0', '0', '0' },
-		{ '1', '1', '1', '1' },
-		{ '0', '0', '0', '0' },
-		{ '0', '0', '0', '0' }
+		{ 0, 0, 0, 0 },
+		{ 1, 1, 1, 1 },
+		{ 0, 0, 0, 0 },
+		{ 0, 0, 0, 0 }
 	},
 	{// J shape
-		{ '0', '0', '0', '0' },
-		{ '1', '1', '1', '0' },
-		{ '0', '0', '1', '0' },
-		{ '0', '0', '0', '0' }
+		{ 0, 0, 0, 0 },
+		{ 1, 1, 1, 0 },
+		{ 0, 0, 1, 0 },
+		{ 0, 0, 0, 0 }
 	},
 	{// L shape
-		{ '0', '0', '0', '0' },
-		{ '0', '1', '1', '1' },
-		{ '0', '1', '0', '0' },
-		{ '0', '0', '0', '0' }
+		{ 0, 0, 0, 0 },
+		{ 1, 1, 1, 0 },
+		{ 1, 0, 0, 0 },
+		{ 0, 0, 0, 0 }
 	},
 	{// O shape
-		{ '0', '0', '0', '0' },
-		{ '0', '1', '1', '0' },
-		{ '0', '1', '1', '0' },
-		{ '0', '0', '0', '0' }
+		{ 0, 0, 0, 0 },
+		{ 0, 1, 1, 0 },
+		{ 0, 1, 1, 0 },
+		{ 0, 0, 0, 0 }
 	},
 	{// S shape
-		{ '0', '0', '0', '0' },
-		{ '0', '1', '1', '0' },
-		{ '1', '1', '0', '0' },
-		{ '0', '0', '0', '0' }
+		{ 0, 0, 0, 0 },
+		{ 0, 1, 1, 0 },
+		{ 1, 1, 0, 0 },
+		{ 0, 0, 0, 0 }
 	},
 	{// T shape
-		{ '0', '0', '0', '0' },
-		{ '1', '1', '1', '0' },
-		{ '0', '1', '0', '0' },
-		{ '0', '0', '0', '0' }
+		{ 0, 0, 0, 0 },
+		{ 1, 1, 1, 0 },
+		{ 0, 1, 0, 0 },
+		{ 0, 0, 0, 0 }
 	},
 	{// Z shape
-		{ '0', '0', '0', '0' },
-		{ '1', '1', '0', '0' },
-		{ '0', '1', '1', '0' },
-		{ '0', '0', '0', '0' }
+		{ 0, 0, 0, 0 },
+		{ 1, 1, 0, 0 },
+		{ 0, 1, 1, 0 },
+		{ 0, 0, 0, 0 }
 	}
 };
 
@@ -108,6 +108,7 @@ struct pair
 	int y;
 };
 
+/*
 const pair 	ROTATION[ 4 ][ SHAPE_MATRIX_LENGTH ][ SHAPE_MATRIX_LENGTH ] =
 {
 	{// default orientation
@@ -135,11 +136,18 @@ const pair 	ROTATION[ 4 ][ SHAPE_MATRIX_LENGTH ][ SHAPE_MATRIX_LENGTH ] =
 		{ {0, 0}, {1, 0}, {2, 0}, {3, 0} }
 	}
 };
+*/
 
 // Directional instructions
 const char LEFT = 'l';
 const char RIGHT = 'r';
 const char DOWN = 'd';
 const char UP = 'u';
+
+// Block texture path
+const char BLOCK_TEXTURE_PATH[] = "block.png";
+
+// High score binary file path
+const char HIGH_SCORE_PATH[] = "high_score.bin";
 
 #endif /* CONSTANTS_H_ */

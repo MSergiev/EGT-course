@@ -4,23 +4,23 @@
 #include <SDL2/SDL.h>
 
 #include "Constants.h"
+#include "Block.h"
 
 // Class for the shapes in the game
 // 4x4 array with information on it's top-left coordinates and which of the blocks in the array are part of the shape
 class Shape
 {
 public:
+
 	// Enum for types of shapes
 	enum Type { NONE = -1, I, J, L, O, S, T, Z };
 
 	// Enum for shape rotation
 	enum Rotation { ROTATION_0, ROTATION_90, ROTATION_180, ROTATION_270 };
 public:
-	// Unused empty constructor
-	Shape();
 
 	// Initialize the shape at the top of the game matrix with type
-	Shape( Type );
+	Shape( SDL_Renderer* = NULL, Type = NONE);
 
 	// Empty destructor
 	~Shape();
@@ -28,11 +28,23 @@ public:
 	// Returns type of shape
 	Shape::Type getType();
 
+	// Renderer setter
+	void setRenderer(SDL_Renderer* renderer);
+
+	// Set rotaton
+	void setRotation(Uint8 rotaton);
+
+	// Get rotaton
+	Uint8 getRotation() const;
+
+	// Calculate rotated coordinates
+	pair getCoords(int x, int y);
+
 	// Renders shape with given SDL_Rederer and asks should it drop lower
-	void render( SDL_Renderer*&, bool );
+	void render( bool );
 
 	// Renders shape as a shadow
-	void renderShadow( SDL_Renderer*& );
+	void renderShadow();
 
 	// Moves shape UP, DOWN, LEFT or RIGHT by one block
 	void move( char );
@@ -58,8 +70,14 @@ private:
 	void init( Shape::Type );
 
 	// Decides on render color
-	void decideColor( SDL_Renderer*& );
+	SDL_Color decideColor();
+
+	
 private:
+	
+	// Shape renderer
+	SDL_Renderer* mRenderer;
+	
 	// Type of the shape
 	Type type;
 
@@ -72,8 +90,14 @@ private:
 	// Integer form of rotation for iteration
 	int iRotation;
 
+	// Rotation indicator
+	Uint8 muiRotation;
+
 	// Rotation of the shape
 	Rotation rRotation;
+
+	// Block object
+	Block mBlockDraw;
 };
 
 #endif /* SHAPE_H_ */

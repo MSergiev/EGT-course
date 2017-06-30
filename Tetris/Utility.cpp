@@ -8,20 +8,20 @@ bool init( SDL_Window*& window, SDL_Renderer*& renderer )
 	// Initialize SDL
 	if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
 	{
-		printf( "Couldn't initialize SDL. Error: %s\n", SDL_GetError() );
+		cerr << "Couldn't initialize SDL. Error: " << SDL_GetError() << endl;
 		result = false;
 	}
 	else
 	{
 		// Set scaling technique
 		if( !SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "1" ) )
-			printf( "Warning: Linear texture filtering not enabled!" );
+			cerr << "Warning: Linear texture filtering not enabled!" << endl;
 
 		// Create window
 		window = SDL_CreateWindow( "Tetris by Mitko", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
 		if( window == NULL )
 		{
-			printf( "Couldn't create window. Error: %s\n", SDL_GetError() );
+			cerr << "Couldn't create window. Error: " << SDL_GetError() << endl;
 			result = false;
 		}
 		else
@@ -30,13 +30,17 @@ bool init( SDL_Window*& window, SDL_Renderer*& renderer )
 			renderer = SDL_CreateRenderer( window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC );
 			if( renderer == NULL )
 			{
-				printf( "Renderer could not be created! SDL Error: %s\n", SDL_GetError() );
+				cerr << "Renderer could not be created! SDL Error: " << SDL_GetError() << endl;
 				result = false;
 			}
 			// Initialize TTF
 			else if( TTF_Init() == -1 )
 			{
-				printf( "SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError() );
+				cerr << "SDL_ttf could not initialize! SDL_ttf Error: " << TTF_GetError() << endl;
+				result = false;
+			// Initialize SDL_Image
+			} else if(!IMG_Init(IMG_INIT_PNG)){
+				cerr << "SDL_image error: " << IMG_GetError() << endl;
 				result = false;
 			}
 		}
@@ -54,14 +58,14 @@ bool loadFont( TTF_Font*& font )
 	font = TTF_OpenFont( FONT, FONT_SIZE );
 	if( font == NULL )
 	{
-		printf( "Failed to load font! SDL_ttf Error: %s\n", TTF_GetError() );
+		cerr << "Failed to load font! SDL_ttf Error: " << TTF_GetError() << endl;
 		result = false;
 	}
 
 	return result;
 }
 
-void close( SDL_Window* window, SDL_Renderer* renderer, TTF_Font* font )
+void close( SDL_Window*& window, SDL_Renderer*& renderer, TTF_Font*& font )
 {
 	// Destroy all the things
 	TTF_CloseFont( font );

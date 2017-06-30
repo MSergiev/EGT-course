@@ -3,6 +3,8 @@
 #include <SDL2/SDL_mixer.h>
 #include "Game.h"
 
+extern SDL_Renderer* renderer;
+
 int main(int argc, char* args[] )
 {
 	// game initializing

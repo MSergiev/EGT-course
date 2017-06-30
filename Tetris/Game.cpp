@@ -1,7 +1,25 @@
 #include "Game.h"
 
-Game::Game()
+Game::Game() 
 {
+	// Initialize SDL and quit if it fails
+	window = NULL;
+	renderer = NULL;
+	if( !init( window, renderer ) )
+		quit = true;
+	// Load media and quit if it fails
+	else if ( !loadFont( font ) )
+		quit = true;
+	else
+		quit = false;
+
+	// Initialize shape objects
+	shape.setRenderer(renderer);
+	nextShape.setRenderer(renderer);
+	shadowShape.setRenderer(renderer);
+	heldShape.setRenderer(renderer);
+
+
 	// Set up random for shapes generation
 	srand( time( NULL ) );
 
@@ -19,18 +37,7 @@ Game::Game()
 					 GAME_MATRIX_UPPERLEFT_X + ( GAME_MATRIX_WIDTH + 1 ) * BLOCK_LENGTH,
 					 GAME_MATRIX_UPPERLEFT_Y + (SHAPE_MATRIX_LENGTH + 1 ) * BLOCK_LENGTH );
 
-	// Initialize SDL and quit if it fails
-	window = NULL;
-	renderer = NULL;
-	if( !init( window, renderer ) )
-		quit = true;
-
-	// Load media and quit if it fails
-	else if ( !loadFont( font ) )
-		quit = true;
-	else
-		quit = false;
-
+	
 	// Pause is off
 	isPaused = false;
 
@@ -62,7 +69,7 @@ Game::~Game()
 void Game::eventHandler( SDL_Event& e )
 {
 	// If player quits
-	if( e.type == SDL_QUIT )
+	if( e.type == SDL_QUIT || e.key.keysym.sym == SDLK_ESCAPE )
 		// Quit the game
 		quit = true;
 	// If a key is pressed and the game is not paused
@@ -83,7 +90,7 @@ bool Game::getQuit() const
 void Game::render()
 {
 	// Set color to black
-	SDL_SetRenderDrawColor( renderer, 0x00, 0x00, 0x00, 0xFF );
+	SDL_SetRenderDrawColor( renderer, 0, 0, 0, 255 );
 
 	// Clear the screen
 	SDL_RenderClear( renderer );
@@ -92,7 +99,7 @@ void Game::render()
 	bool drop = processFrame();
 
 	// Render the shape
-	shape.render( renderer, drop );
+	shape.render( drop );
 
 	// Render the shadow
 	renderShadow();
@@ -156,7 +163,7 @@ void Game::genNextShape()
 void Game::renderNextShape()
 {
 	// Render next shape without dropping it
-	nextShape.render( renderer, false );
+	nextShape.render( false );
 
 	// Set rectangle to match the whole next shape block
 	SDL_Rect rect;
@@ -176,7 +183,7 @@ void Game::renderNextShape()
 void Game::renderHeldShape()
 {
 	// Render next shape without dropping it
-	heldShape.render( renderer, false );
+	heldShape.render( false );
 
 	// Set rectangle to match the whole held shape block
 	SDL_Rect rect;
@@ -203,7 +210,7 @@ void Game::renderShadow()
 		shadowShape.move( DOWN );
 
 	// Render the shape as a shadow
-	shadowShape.renderShadow( renderer );
+	shadowShape.renderShadow();
 }
 
 void Game::renderScore()
@@ -494,12 +501,14 @@ void Game::mouseEvent( SDL_Event& e )
 
 void Game::spin()
 {
+	shape.setRotation(shape.getRotation()+1);
+	/*
 	// Make a temporary shape
-	Shape tempShape( Shape::I );
+	Shape tempShape( renderer );
 
 	// Copy into it the current one and rotate it
 	tempShape = shape;
-	tempShape.turn();
+	//tempShape.turn();
 
 	while( true )
 		// Move it as much as needed if it glitches through the walls on LEFT, RIGHT or DOWN
@@ -516,6 +525,7 @@ void Game::spin()
 	if( !matrix.isGlitch( tempShape ) )
 		// We'll apply the changes to our current shape
 		shape = tempShape;
+		*/
 }
 
 void Game::speedUp()
@@ -578,14 +588,3 @@ void Game::hold()
 						 GAME_MATRIX_UPPERLEFT_Y + (SHAPE_MATRIX_LENGTH + 1 ) * BLOCK_LENGTH );
 	}
 }
-
-
-
-
-
-
-
-
-
-
-

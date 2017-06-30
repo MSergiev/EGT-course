@@ -12,7 +12,7 @@ class Matrix
 public:
 	// Initialize matrix as empty
 	Matrix();
-	// Empty destructor
+	// Empty destructor`
 	~Matrix();
 public:
 	// Render the game matrix on screen
@@ -30,6 +30,9 @@ public:
 	// Add a shape to the game matrix
 	void assimilate( Shape& );
 
+	// Get number of cleared lines since the start of the game
+	Uint32 getClearedLines() const;
+
 	// Clear the matrix
 	void clear();
 
@@ -44,7 +47,10 @@ public:
 private:
 	// Returns a char responding to a shape type for color recognition by the game matrix renderer
 	char color( Shape::Type );
-private:
+	
+	// Cleared line counter
+	Uint32 muiClearedLineCounter;
+
 	// Game matrix
 	char data[ GAME_MATRIX_WIDTH ][ GAME_MATRIX_HEIGHT ];
 };

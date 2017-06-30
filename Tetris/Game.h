@@ -14,6 +14,8 @@
 #include "TextTexture.h"
 #include "Button.h"
 
+//SDL_Renderer* renderer = NULL;
+
 // Class for the game Tetris
 class Game
 {
@@ -101,7 +103,7 @@ private:
 
 
 private:
-	// Window and it's renderer for the game
+	// Window and its renderer for the game
 	SDL_Window* window;
 	SDL_Renderer* renderer;
 

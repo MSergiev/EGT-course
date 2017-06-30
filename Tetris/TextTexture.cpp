@@ -32,7 +32,7 @@ void TextTexture::render( SDL_Renderer*& renderer, int x, int y )
 	rect.h = textureHeight;
 
 	// Set color to white
-	SDL_SetRenderDrawColor( renderer, 0x00, 0x00, 0x00, 0xFF );
+	SDL_SetRenderDrawColor( renderer, 255,255,255,255 );
 
 	// Render text
 	SDL_RenderCopy(renderer, pTexture, NULL, &rect);
@@ -44,7 +44,7 @@ void TextTexture::remake( SDL_Renderer*& renderer, const char* text, TTF_Font*& 
 	destroy();
 
 	// Make surfaces to get rendered text
-	SDL_Surface* tempSurface = TTF_RenderText_Solid( font, text, SDL_Color{ 0xFF, 0xFF, 0xFF, 0xFF } );
+	SDL_Surface* tempSurface = TTF_RenderText_Solid( font, text, SDL_Color{ 255,255,255,255 } );
 
 	// Get dimensions of the generated text
 	textureWidth = tempSurface->w;
@@ -56,7 +56,7 @@ void TextTexture::remake( SDL_Renderer*& renderer, const char* text, TTF_Font*& 
 	// If failed
 	if( pTexture == NULL )
 	{
-		printf( "Unable to create texture from rendered text \"%s\"! SDL Error: %s\n", text, SDL_GetError() );
+		cerr << "Unable to create texture from rendered text! SDL Error: " << SDL_GetError() << endl;
 
 		textureWidth = 0;
 		textureHeight = 0;

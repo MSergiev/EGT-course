@@ -3,7 +3,9 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
-#include <cstdio>
+#include <iostream>
+using std::cerr;
+using std::endl;
 
 // Stores textures and it's dimensions
 class TextTexture

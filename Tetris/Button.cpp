@@ -79,14 +79,3 @@ bool Button::isPressed()
 {
 	return pressed;
 }
-
-
-
-
-
-
-
-
-
-
-

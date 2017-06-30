@@ -7,6 +7,9 @@ Matrix::Matrix()
 		for( int y = 0; y < GAME_MATRIX_HEIGHT; y++ )
 			// Set it to empty
 			data[ x ][ y ] = '0';
+
+	// Zero the cleared line counter
+	muiClearedLineCounter = 0;
 }
 
 Matrix::~Matrix()
@@ -81,7 +84,7 @@ void Matrix::render( SDL_Renderer*& pRenderer )
 	rect.h = GAME_MATRIX_HEIGHT * BLOCK_LENGTH;
 
 	// Draw a gray outline
-	SDL_SetRenderDrawColor( pRenderer, 0x69, 0x69, 0x69, 0xFF );
+	SDL_SetRenderDrawColor( pRenderer, 150, 150, 150, 255 );
 	SDL_RenderDrawRect( pRenderer, &rect );
 }
 
@@ -172,6 +175,8 @@ bool Matrix::isGlitch( Shape& shape )
 				// Calculate it's place on the game matrix
 				int tempX = ( shape.getX() - GAME_MATRIX_UPPERLEFT_X ) / BLOCK_LENGTH + x;
 				int tempY = ( shape.getY() - GAME_MATRIX_UPPERLEFT_Y ) / BLOCK_LENGTH + y;
+				
+
 				// If the block is not empty
 				if( data[ tempX ][ tempY ]  != '0' )
 					return true;
@@ -186,18 +191,25 @@ void Matrix::assimilate( Shape& shape )
 	char type = color( shape.getType() );
 
 	// For each element in the game matrix
-	for( int y = 0; y < SHAPE_MATRIX_LENGTH; y++ )
-		for( int x = 0; x < SHAPE_MATRIX_LENGTH; x++ )
+	for( int y = 0; y < SHAPE_MATRIX_LENGTH; ++y ) {
+		for( int x = 0; x < SHAPE_MATRIX_LENGTH; ++x ) {
+
 			// If the block is part of the shape
 			if( shape.isBlock( x, y ) )
 			{
-				// Calculate it's position in the game matrix
+				// Calculate its position in the game matrix
 				int tempX = ( shape.getX() - GAME_MATRIX_UPPERLEFT_X ) / BLOCK_LENGTH + x;
 				int tempY = ( shape.getY() - GAME_MATRIX_UPPERLEFT_Y ) / BLOCK_LENGTH + y;
 
-				// Set it's block in the game matrix to it's type
+				// Set its block in the game matrix to its type
 				data[ tempX ][ tempY ] = type;
 			}
+		}
+	}
+}
+
+Uint32 Matrix::getClearedLines() const {
+	return muiClearedLineCounter;
 }
 
 void Matrix::clear()
@@ -248,6 +260,9 @@ int Matrix::pop()
 			y++;
 		}
 	}
+
+	// Add calculated number to the total counter
+	muiClearedLineCounter+=removed;
 
 	return removed;
 }
@@ -316,6 +331,8 @@ char Matrix::color( Shape::Type type )
 		break;
 	case Shape::Z:
 		return 'Z';
+		break;
+	case Shape::NONE:
 		break;
 	}
 
